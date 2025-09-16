@@ -14,3 +14,10 @@ function draw() { //runs over and over running 60 frames per sec
   fill(100,mouseX, mouseY);
   circle(mouseX, mouseY, 10);
 }
+
+function drawTwoCircles() {
+  //draws to circles one at fixed location
+  //on at mouse location
+  fill(0, 255, 0);
+  circle(mouseX,mouseY,30);
+}
