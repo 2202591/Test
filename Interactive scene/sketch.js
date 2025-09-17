@@ -4,41 +4,41 @@
 //Mr. Scott
 //CS30 P4
 
-
-let circleColor = false;
-let currentColor = "white";
-
-let x; let y = 300;
+let centerX = width/2;
+let centerY = height/2;
+let ma = 235, va = 145, ea = 3, ra = 300, ja = 90;
+let mr = 125, vr = 175, er = 230, rr = 275, jr = 300;
 
 function setup() {
   createCanvas(800, 800);
   rectMode(CENTER);
-  x = width/2
 }
 
 function draw() {  //60 fps
-  background(0, 100, 200);
-  challenge();  //coordinate system challenge
-  movement();
-  rect(x, y, 60, 30);
+  background(0, 0, 0);
   noStroke();
-  triangle(0,500,);
-  fill(211, 211, 211);
+  move();
+
+  fill(246, 173, 48);
+  circle(width/2, height/2, 150);
+
+  fill(196, 93, 49);
+  circle(centerX + mr * cos(ma), centerY + mr * sin(ma), 40);
+
+  fill(134, 57, 24);
+  circle(centerX + mr * cos(ma), centerY + mr * sin(ma), 60); // adjust orbits
+
+  fill(24, 134, 68);
+  circle(centerX + mr * cos(ma), centerY + mr * sin(ma), 80);
+
+  fill(82, 69, 168);
+  circle(centerX + mr * cos(ma), centerY + mr * sin(ma), 70);
+
+  fill(145, 127, 11);
+  circle(centerX + mr * cos(ma), centerY + mr * sin(ma), 120);
+
 }
 
-function movement() {
-  // check for keyboard presses each frame
-  // and move the rectangle accordingly
-
-  // if (keyCode === RIGHT_ARROW && keyIsPressed) x += 5;
-  // else if (keyCode === LEFT_ARROW && keyIsPressed) x -= 5;
-
-  if (keyIsDown(UP_ARROW)) y -= 15;
-  if (keyIsDown(DOWN_ARROW)) y += 15;
-  if (keyIsDown(LEFT_ARROW)) x -= 15;
-  if (keyIsDown(RIGHT_ARROW)) x += 15;
-}
-
-function keyPressed() {
-
+function move() {
+  
 }
