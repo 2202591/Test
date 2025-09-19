@@ -6,10 +6,8 @@
 
 let centerX;
 let centerY;
-let ma = 238; let va = 146; let ea = 2; let ra = 300; let ja = 90;
-let mr = 110; let vr = 165; let er = 260; let rr = 325; let jr = 430;
-
-angleMode(DEGREES);
+let ma = 238; let va = 146; let ea = 2; let ra = 300; let ja = 90; let ca = 90;
+let mr = 110; let vr = 165; let er = 260; let rr = 325; let jr = 430; let cr = 400;
 
 function setup() {
   createCanvas(1000, 1000);
@@ -49,41 +47,37 @@ function draw() {  //60 fps
   fill(145, 127, 11);
   circle(centerX + jr * cos(ja), centerY + jr * sin(ja), 120);
   
+  fill(255, 255, 255);
+
   movement();
 
   let src = "Corbin";
 
-  fill(255,255,255);
   textSize(40);
-  text(src, 750, 900);
+  text(src, 780, 900);
 }
 
 function movement() {
   ma += 0.04;
-  va += 0.03;
+  va -= 0.03;
   ea += 0.02;
   ra += 0.02;
-  ja += 0.01;
+  ja -= 0.01;
+  ca += 0.05;
 
-  if(ma === 360) {
+  if (ma === 360) {
     ma = 0;
   }
-  if(va === 360) {
-    va = 0;
+  if (va === 0) {
+    va = 360;
   }
-  if(ea === 360) {
+  if (ea === 360) {
     ea = 0;
   }
-  if(ra === 360) {
+  if (ra === 360) {
     ra = 0;
   }
-  if(ja === 360) {
-    ja = 0;
+  if (ja === 0) {
+    ja = 360;
   }
 }
-
-function mousePressed() {
-
-}
-
-
