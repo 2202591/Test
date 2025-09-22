@@ -4,8 +4,10 @@
 //Mr. Scott
 //CS30 P4
 
-let centerX;
-let centerY;
+let centerX; let x = 500;
+let centerY; let y = 200;
+let r = 0; let g = 0; let b = 0;
+let back = 0;
 let ma = 238; let va = 146; let ea = 2; let ra = 300; let ja = 90; let ca = 90;
 let mr = 110; let vr = 165; let er = 260; let rr = 325; let jr = 430; let cr = 400;
 
@@ -17,7 +19,9 @@ function setup() {
 }
 
 function draw() {  //60 fps
-  background(0, 0, 0);
+  if (color) {
+    background(r, g, b);
+  }
 
   fill(255,128,0);
   triangle(mouseX - 10, mouseY + 35, mouseX + 10, mouseY + 35, mouseX, mouseY - 20);
@@ -26,7 +30,6 @@ function draw() {  //60 fps
   fill(255,0,0);
   triangle(mouseX - 10, mouseY - 20, mouseX + 10, mouseY - 20, mouseX, mouseY - 40);
   
-
   noStroke();
 
   fill(246, 173, 48);
@@ -47,14 +50,15 @@ function draw() {  //60 fps
   fill(145, 127, 11);
   circle(centerX + jr * cos(ja), centerY + jr * sin(ja), 120);
   
-  fill(255, 255, 255);
+  fill(211, 211, 211);
+  rect(x , y, 120, 30);
+  rect(x , y, 20, 80);
 
   movement();
-
-  let src = "Corbin";
+  mousePressed();
 
   textSize(40);
-  text(src, 780, 900);
+  text("Corbin", 780, 900);
 }
 
 function movement() {
@@ -80,4 +84,42 @@ function movement() {
   if (ja === 0) {
     ja = 360;
   }
+
+  if (keyIsDown(UP_ARROW)) y -= 5;
+  if (keyIsDown(DOWN_ARROW)) y += 5;
+  if (keyIsDown(LEFT_ARROW)) x -= 5;
+  if (keyIsDown(RIGHT_ARROW)) x += 5;
+
+}
+
+function mousePressed(){
+  if (mouseButton === CENTER) {
+    mouseButton = LEFT;
+    back += 1;
+    if (back === 4) {
+      back = 0;
+    }
+  }
+
+  if (back === 0) {
+    r = 0;
+    g = 0;
+    b = 0;
+  }
+  else if (back === 1) {
+    r = 51;
+    g = 0;
+    b = 51;
+  }
+  else if (back === 2) {
+    r = 51;
+    g = 0;
+    b = 25;
+  }
+  else {
+    r = 0;
+    g = 0;
+    b = 51;
+  }
+  
 }
