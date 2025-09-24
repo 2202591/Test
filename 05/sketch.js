@@ -12,9 +12,8 @@ function setup() {
 
 function draw() {
   background(220);
-circleLines(height * 0.5, 80);
-circleLines(height * 0.8, 30);
-distance();
+  circleLines(height * 0.5, 80);
+  circleLines(height * 0.8, 30);
 
 }
 
@@ -24,9 +23,9 @@ function circleLines(y, size) {
   let xend = width * 0.9;
 
   for(let x = xstart; x <= xend; x += size) {
-      circle(x, y, size);
-      let d = distance(x, mouseX, y, mouseY)
-      text(d, x, y)
+    circle(x, y, size);
+    let d = distance(x, mouseX, y, mouseY)
+    text(d, x, y)
   }
 
 }
