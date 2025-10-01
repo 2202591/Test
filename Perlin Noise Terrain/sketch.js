@@ -4,30 +4,30 @@
 // CS30
 
 let rectWidth = 1;
-let timeY;
+let noiseTime;
+let noiseStart;
 let largestY = 1000;
 let largestX;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  timeY = random(0,100);
-  generateTerrain();
-  
-
+  noiseStart = random(0,100);
 }
 
 function draw() {
-  // background(220);
+  background(220);
+  generateTerrain();
+  drawFlag();
 }
 
 function generateTerrain() {
 
   rectMode(CORNERS);
+  noiseTime = noiseStart;
 
   for (let x = 0; x < width; x += rectWidth) {
-    let rectHeight = noise(timeY);
-    rectHeight = map(rectHeight, 0, 1, 50, height * 0.7);
-    // let rectHeight = random(50,500);
+    let rectHeight = noise(noiseTime);
+    rectHeight = map(rectHeight, 0, 1, 50, height * 0.9);
 
     let x2 = x + rectWidth;
     let y2 = height - rectHeight;
@@ -35,57 +35,21 @@ function generateTerrain() {
     if (y2 < largestY) {
       largestY = y2;
       largestX = x2;
-
     }
-    
+
     rect(x, height, x2, y2);
-    timeY += 0.007;
-
-    print(largestY + ", " + largestX);
+    noiseTime += 0.007;
   }
+  noiseStart += 0.007;
+  noiseTime = noiseStart;
+}
 
-  noFill()
+function drawFlag() {
+  noStroke();
+  fill(0);
   rect(largestX,largestY, largestX + 2, largestY - 30);
   fill(255,0,0);
   triangle(largestX + 2, largestY - 30, largestX + 12, largestY - 24, largestX + 2, largestY - 18);
-
+  fill(0);
 }
 
-// let NUM_CIRCLES = 50;
-// let seed;
-
-// function setup() {
-//   createCanvas(windowWidth, windowHeight);
-//   seed = random(100);
-// }
-
-// function draw() {
-//   randomSeed(seed);
-//   background(220);
-//   drawCircles();
-// }
-
-// function drawCircles() {
-//   noFill();
-
-//   let smallestX;
-//   let smallestY;
-//   let smallestD = Infinity;
-
-//   for (let i = 0; i < NUM_CIRCLES; i++) {
-//     let x = random(0, width);
-//     let y = random(0, height);
-//     let d = random(20, 100);
-
-//     if(d < smallestD) {
-//       smallestD = d;
-//       smallestX = x;
-//       smallestY = y;
-//     }
-
-//     circle(x, y, d);
-//   }
-
-//   fill(255,0,0);
-//   circle(smallestX,smallestY,smallestD);
-// }
