@@ -3,11 +3,14 @@
 // September 29, 2025
 // CS30
 
-let rectWidth = 1;
+let rectWidth = 1;  //rectangle width
 let noiseTime;
 let noiseStart;
-let largestY = 1000;
+let largestY = Infinity;
 let largestX;
+let speed = 1;
+let total;
+let averageY;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -18,11 +21,13 @@ function draw() {
   background(220);
   generateTerrain();
   drawFlag();
+  changeWidth();
 }
 
 function generateTerrain() {
-
+  //generates terrain
   rectMode(CORNERS);
+  noStroke();
   noiseTime = noiseStart;
 
   for (let x = 0; x < width; x += rectWidth) {
@@ -39,17 +44,49 @@ function generateTerrain() {
 
     rect(x, height, x2, y2);
     noiseTime += 0.007;
+
+    if(largestX < 0){
+      largestY = Infinity;
+    }
+
+    total += rectHeight;
+    averageY = total/x;
   }
+
+  average(averageY);
+
   noiseStart += 0.007;
   noiseTime = noiseStart;
 }
 
 function drawFlag() {
+  //draws the flag at the highest point
   noStroke();
   fill(0);
   rect(largestX,largestY, largestX + 2, largestY - 30);
   fill(255,0,0);
   triangle(largestX + 2, largestY - 30, largestX + 12, largestY - 24, largestX + 2, largestY - 18);
   fill(0);
+  largestX -= speed;
 }
 
+function changeWidth() {
+  //allows user to change the rectangle Width
+  if (keyIsDown(UP_ARROW)) {
+    rectWidth += 0.02;
+    speed += 0.02;
+    largestY = Infinity;
+  }
+  if (keyIsDown(DOWN_ARROW) && rectWidth > 1) {
+    rectWidth -= 0.02;
+    speed -= 0.02;
+    largestY = Infinity;
+  }
+}
+
+function average(y) {
+  //creates average height rectangle
+  fill(255,0,0,75);
+  
+  fill(0);
+}
