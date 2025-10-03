@@ -9,8 +9,8 @@ let noiseStart;
 let largestY = Infinity;
 let largestX;
 let speed = 1;
-let total;
-let averageY;
+let sumY = 0;
+let average;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -42,6 +42,10 @@ function generateTerrain() {
       largestX = x2;
     }
 
+    sumY += rectHeight;
+    average = sumY / x;
+
+    fill(0);
     rect(x, height, x2, y2);
     noiseTime += 0.007;
 
@@ -49,11 +53,8 @@ function generateTerrain() {
       largestY = Infinity;
     }
 
-    total += rectHeight;
-    averageY = total/x;
   }
-
-  average(averageY);
+  averageHeight();
 
   noiseStart += 0.007;
   noiseTime = noiseStart;
@@ -63,10 +64,9 @@ function drawFlag() {
   //draws the flag at the highest point
   noStroke();
   fill(0);
-  rect(largestX,largestY, largestX + 2, largestY - 30);
+  rect(largestX,largestY + 30, largestX + 2, largestY - 30);
   fill(255,0,0);
   triangle(largestX + 2, largestY - 30, largestX + 12, largestY - 24, largestX + 2, largestY - 18);
-  fill(0);
   largestX -= speed;
 }
 
@@ -84,9 +84,9 @@ function changeWidth() {
   }
 }
 
-function average(y) {
-  //creates average height rectangle
-  fill(255,0,0,75);
-  
-  fill(0);
+function averageHeight() {
+  fill(255, 0, 0, 75);
+  noStroke();
+  rect(0, height - average, width, average);
+
 }
