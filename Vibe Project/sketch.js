@@ -1,103 +1,167 @@
-let car1;
-let car2;
+// Tank Battle - Stationary Rotating Tanks
+// Player 1: rotate with A/D, shoot SPACE
+// Player 2: rotate with LEFT/RIGHT, shoot ENTER
+
+let tank1, tank2;
+let bullets = [];
+let walls = [];
 
 function setup() {
-  createCanvas(600, 400);
-  angleMode(DEGREES);
+  createCanvas(800, 500);
 
-  car1 = new Car(150, height / 2, 0, color(255, 0, 0));
-  car2 = new Car(450, height / 2, 180, color(0, 0, 255));
+  // Tanks
+  tank1 = new Tank(120, height / 2, 0, color(0, 180, 255));   // Blue
+  tank2 = new Tank(width - 120, height / 2, 180, color(255, 100, 100)); // Red
+
+  // Outer arena walls
+  walls.push(new Wall(width / 2, 25, width - 40, 20)); // Top
+  walls.push(new Wall(width / 2, height - 25, width - 40, 20)); // Bottom
+  walls.push(new Wall(25, height / 2, 20, height - 80)); // Left
+  walls.push(new Wall(width - 25, height / 2, 20, height - 80)); // Right
+
+  // Inner walls
+  walls.push(new Wall(width / 2, height / 2, 100, 20));
+  walls.push(new Wall(width / 4, height / 3, 20, 100));
+  walls.push(new Wall(width * 0.75, height / 3, 20, 100));
+  walls.push(new Wall(width / 2, height * 0.75, 150, 20));
+  walls.push(new Wall(width / 3, height * 0.65, 20, 120));
+  walls.push(new Wall(width * 0.65, height * 0.45, 150, 20));
+
+  // Additional walls directly in front of the tanks
+  walls.push(new Wall(tank1.x + 60, tank1.y, 20, 60)); // Blue tank front
+  walls.push(new Wall(tank2.x - 60, tank2.y, 20, 60)); // Red tank front
 }
 
 function draw() {
-  background(220);
+  background(170, 220, 170);
 
-  // Update and show both cars
-  car1.handleInput('W', 'S', 'A', 'D');
-  car1.update();
-  car1.display();
+  for (let w of walls) w.display();
 
-  car2.handleInput(UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW);
-  car2.update();
-  car2.display();
+  tank1.update();
+  tank2.update();
+  tank1.display();
+  tank2.display();
+
+  // Bullets
+  for (let b of bullets) {
+    b.update();
+
+    for (let w of walls) {
+      if (w.hits(b)) b.bounce(w);
+    }
+
+    b.display();
+  }
 }
 
-class Car {
+// ================= CONTROLS =================
+// Player 1 rotates: A/D + shoot SPACE
+function keyPressed() {
+  if (keyCode === 65) tank1.turnL = true;    // A
+  if (keyCode === 68) tank1.turnR = true;    // D
+  if (keyCode === 32) tank1.shoot();         // SPACE
+
+  // Player 2 rotates: LEFT/RIGHT + shoot ENTER
+  if (keyCode === LEFT_ARROW) tank2.turnL = true;
+  if (keyCode === RIGHT_ARROW) tank2.turnR = true;
+  if (keyCode === ENTER) tank2.shoot();
+}
+
+function keyReleased() {
+  if (keyCode === 65) tank1.turnL = false;
+  if (keyCode === 68) tank1.turnR = false;
+
+  if (keyCode === LEFT_ARROW) tank2.turnL = false;
+  if (keyCode === RIGHT_ARROW) tank2.turnR = false;
+}
+
+// ================= CLASSES =================
+class Tank {
   constructor(x, y, angle, col) {
-    this.pos = createVector(x, y);
-    this.angle = angle; // in degrees
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
     this.col = col;
-
-    this.speed = 0;
-    this.maxSpeed = 5;
-    this.acceleration = 0.2;
-    this.friction = 0.1;
-    this.turnSpeed = 4;
-
-    this.width = 40;
-    this.height = 20;
-  }
-
-  handleInput(forwardKey, backwardKey, leftKey, rightKey) {
-    // Handle acceleration and deceleration
-    if (keyIsDown(forwardKey)) {
-      this.speed += this.acceleration;
-    } else if (keyIsDown(backwardKey)) {
-      this.speed -= this.acceleration;
-    } else {
-      // Apply friction to slow down gradually
-      if (this.speed > 0) {
-        this.speed -= this.friction;
-        if (this.speed < 0) this.speed = 0;
-      } else if (this.speed < 0) {
-        this.speed += this.friction;
-        if (this.speed > 0) this.speed = 0;
-      }
-    }
-
-    // Limit speed
-    this.speed = constrain(this.speed, -this.maxSpeed, this.maxSpeed);
-
-    // Handle turning (only if moving)
-    if (this.speed !== 0) {
-      if (keyIsDown(leftKey)) {
-        this.angle -= this.turnSpeed * (this.speed > 0 ? 1 : -1);
-      }
-      if (keyIsDown(rightKey)) {
-        this.angle += this.turnSpeed * (this.speed > 0 ? 1 : -1);
-      }
-    }
+    this.turnL = false;
+    this.turnR = false;
+    this.reload = 0;
   }
 
   update() {
-    // Update position based on speed and angle
-    let velocity = p5.Vector.fromAngle(radians(this.angle));
-    velocity.setMag(this.speed);
-    this.pos.add(velocity);
+    // Rotation only
+    if (this.turnL) this.angle -= 3;
+    if (this.turnR) this.angle += 3;
 
-    // Keep car inside canvas
-    this.pos.x = constrain(this.pos.x, 0, width);
-    this.pos.y = constrain(this.pos.y, 0, height);
+    if (this.reload > 0) this.reload--;
+  }
+
+  shoot() {
+    if (this.reload === 0) {
+      let bx = this.x + cos(radians(this.angle)) * 20;
+      let by = this.y + sin(radians(this.angle)) * 20;
+      bullets.push(new Bullet(bx, by, this.angle));
+      this.reload = 30;
+    }
   }
 
   display() {
     push();
-    translate(this.pos.x, this.pos.y);
-    rotate(this.angle);
+    translate(this.x, this.y);
+    rotate(radians(this.angle));
     rectMode(CENTER);
     fill(this.col);
-    rect(0, 0, this.width, this.height);
-
-    // Draw a simple windshield or front marker
-    fill(255);
-    triangle(
-      this.width / 2,
-      0,
-      this.width / 4,
-      -this.height / 4,
-      this.width / 4,
-      this.height / 4
-    );
+    rect(0, 0, 30, 20, 5);
+    fill(50);
+    rect(15, 0, 18, 4); // barrel
     pop();
+  }
+}
+
+class Bullet {
+  constructor(x, y, angle) {
+    this.x = x;
+    this.y = y;
+    this.vx = cos(radians(angle)) * 6;
+    this.vy = sin(radians(angle)) * 6;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+
+  bounce(wall) {
+    let horizontal = wall.w > wall.h;
+    if (horizontal) this.vy *= -1;
+    else this.vx *= -1;
+  }
+
+  display() {
+    fill(0);
+    ellipse(this.x, this.y, 8);
+  }
+}
+
+class Wall {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  display() {
+    fill(120, 90, 60);
+    rectMode(CENTER);
+    rect(this.x, this.y, this.w, this.h);
+  }
+
+  hits(bullet) {
+    return (
+      bullet.x > this.x - this.w / 2 &&
+      bullet.x < this.x + this.w / 2 &&
+      bullet.y > this.y - this.h / 2 &&
+      bullet.y < this.y + this.h / 2
+    );
   }
 }
