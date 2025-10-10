@@ -1,7 +1,5 @@
 // Clock
 
-let hours; let minutes; let seconds;
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
@@ -11,9 +9,9 @@ function setup() {
 function draw() {
   background(220);
   makeClock();
-  seconds();
-  minutes();
-  hours();
+  secs();
+  mins();
+  hrs();
 }
 
 function makeClock() {
@@ -37,7 +35,7 @@ function makeClock() {
   pop();
 }
 
-function seconds() {
+function secs() {
   push();
   let seconds = now.getSeconds();
   seconds = seconds*6;
@@ -51,7 +49,7 @@ function seconds() {
   pop();
 }
 
-function minutes() {
+function mins() {
   push();
   let minutes = now.getMinutes();
   minutes = minutes*6;
@@ -65,10 +63,12 @@ function minutes() {
   pop();
 }
 
-function hours() {
+function hrs() {
   push();
+  let hours = now.getHours();
+  hours = hours*30
   translate(width/2, height/2);
-  rotate(frameCount/7200);
+  rotate(hours);
 
   strokeWeight(10);
   line(0, 0, 0, -80);
