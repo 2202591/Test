@@ -3,7 +3,7 @@
 function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
-  const now = new Date();
+  let now;
 }
 
 function draw() {
@@ -17,6 +17,7 @@ function draw() {
 function makeClock() {
   push();
   translate(width/2, height/2);
+  now = new Date();
 
   noFill();  //draws clock
   strokeWeight(6);
