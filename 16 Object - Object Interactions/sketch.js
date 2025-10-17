@@ -34,7 +34,7 @@ class csNode {
     this.c = color(random(255), random(255), random(255));
 
     this.xTime = random(10);  this.yTime = random(10);
-    this.timeShift = 0.01;  this.maxSpeed = 50;
+    this.timeShift = 0.01;  this.maxSpeed = 5;
 
   }
 
