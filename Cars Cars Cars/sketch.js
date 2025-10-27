@@ -24,6 +24,7 @@ function draw() {
   background(220);
   drawRoad();
   mousePressed();
+  keyPressed();
   for(let e of eastbound) {
     e.action();
   }
@@ -53,13 +54,19 @@ function mousePressed() {
     mouseButton = CENTER;
   }
 
+}
+
+function keyPressed() {
+  if(keyCode === 32) {
+    trafficLight = new TrafficLight(1);
+    frameRate(0);
+  }
 
 }
 
 
 class Vehicle{
-  constructor(direction, light) {
-    this.actionlight = light;
+  constructor(direction) {
     this.x = random(width);
     //type 1 = car, type 2 = truck
     this.type = random(1);   this.type = round(this.type);
@@ -68,10 +75,10 @@ class Vehicle{
     this.direction = direction;
     this.c = color(random(255), random(255), random(255));
     if (direction === 0) {
-      this.y = (random(height * 0.55, height * 0.8));
+      this.y = (random(height * 0.55, height * 0.85));
     }
     else {
-      this.y = (random(height * 0.2, height * 0.45));
+      this.y = (random(height * 0.15, height * 0.45));
     }
   }
 
@@ -80,8 +87,7 @@ class Vehicle{
     this.changeColor();
     this.speedUp();
     this.speedDown();
-    // if (this.light)
-      this.move();
+    this.move();
   }
 
   display(){
@@ -168,6 +174,6 @@ class TrafficLight {
     else {
       fill(255, 0 ,0);
     }
-    circle(this.x, this.y, 150);
+    circle(this.x, this.y, 140);
   }
 }
