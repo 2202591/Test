@@ -16,7 +16,6 @@ function setup() {
   for(let i = 0; i < 20; i++) {
     westbound.push(new Vehicle(1));
   }
-  trafficLight = new TrafficLight(0);
 
 }
 
@@ -46,10 +45,10 @@ function drawRoad(){
 function mousePressed() {
   if (mouseButton === LEFT) {
     if (keyIsDown && keyCode !== SHIFT) {
-      eastbound.push(new Vehicle(0));
+      eastbound.push(new Vehicle(0,));
     }
     else {
-      westbound.push(new Vehicle(1));
+      westbound.push(new Vehicle(1,0));
     }
     mouseButton = CENTER;
   }
@@ -58,19 +57,19 @@ function mousePressed() {
 
 function keyPressed() {
   if(keyCode === 32) {
-    trafficLight = new TrafficLight(1);
-    frameRate(0);
+    trafficLight
   }
 
 }
 
 
 class Vehicle{
-  constructor(direction) {
+  constructor(direction, on) {
     this.x = random(width);
     //type 1 = car, type 2 = truck
     this.type = random(1);   this.type = round(this.type);
     this.speed = random(1,15);
+    this.on = on;
     //0 = east, 1 = west
     this.direction = direction;
     this.c = color(random(255), random(255), random(255));
@@ -88,6 +87,7 @@ class Vehicle{
     this.speedUp();
     this.speedDown();
     this.move();
+    this.stop();
   }
 
   display(){
@@ -120,8 +120,6 @@ class Vehicle{
       }
 
     }
-
-
 
   }
 
@@ -159,16 +157,26 @@ class Vehicle{
     }
   }
 
+  stop() {
+    if(this.on === 1) {
+      trafficLight = new TrafficLight(1);
+    }
+    else {
+      trafficLight = new TrafficLight(0);
+    }
+  }
+
 }
 
 class TrafficLight {
-  constructor(type) {
+  constructor(on) {
     this.x = width*0.075; this.y = height*0.075;
-    this.type = type;
+    this.on = on;
+    
   }
 
   display() {
-    if (this.type === 0) {
+    if (this.on === 0) {
       fill(0, 255, 0);
     }
     else {
