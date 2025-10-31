@@ -16,14 +16,13 @@ function setup() {
   for(let i = 0; i < 20; i++) {
     westbound.push(new Vehicle(1));
   }
+  trafficLight = new TrafficLight(0);
 
 }
 
 function draw() {
   background(220);
   drawRoad();
-  mousePressed();
-  keyPressed();
   for(let e of eastbound) {
     e.action();
   }
@@ -31,6 +30,10 @@ function draw() {
     w.action();
   }
   trafficLight.display();
+  
+  if(keyIsPressed && keyCode === 32) {
+    trafficLight = new TrafficLight(1);
+  }
 }
 
 function drawRoad(){
@@ -45,31 +48,22 @@ function drawRoad(){
 function mousePressed() {
   if (mouseButton === LEFT) {
     if (keyIsDown && keyCode !== SHIFT) {
-      eastbound.push(new Vehicle(0,));
+      eastbound.push(new Vehicle(0));
     }
     else {
-      westbound.push(new Vehicle(1,0));
+      westbound.push(new Vehicle(1));
     }
     mouseButton = CENTER;
   }
 
 }
 
-function keyPressed() {
-  if(keyCode === 32) {
-    trafficLight
-  }
-
-}
-
-
 class Vehicle{
-  constructor(direction, on) {
+  constructor(direction) {
     this.x = random(width);
     //type 1 = car, type 2 = truck
     this.type = random(1);   this.type = round(this.type);
     this.speed = random(1,15);
-    this.on = on;
     //0 = east, 1 = west
     this.direction = direction;
     this.c = color(random(255), random(255), random(255));
@@ -86,8 +80,7 @@ class Vehicle{
     this.changeColor();
     this.speedUp();
     this.speedDown();
-    this.move();
-    this.stop();
+    this.move();   
   }
 
   display(){
@@ -124,7 +117,10 @@ class Vehicle{
   }
 
   move() {
-    if (this.direction === 0) {
+    if(keyIsPressed && keyCode === 32) {
+      this.x += 0;
+    }
+    else if (this.direction === 0) {
       this.x += this.speed;
       if (this.x > width) {
         this.x = 0 - 0 - vehicleWidth;
@@ -156,23 +152,13 @@ class Vehicle{
       this.c = color(random(255), random(255), random(255));
     }
   }
-
-  stop() {
-    if(this.on === 1) {
-      trafficLight = new TrafficLight(1);
-    }
-    else {
-      trafficLight = new TrafficLight(0);
-    }
-  }
-
+  
 }
 
 class TrafficLight {
   constructor(on) {
-    this.x = width*0.075; this.y = height*0.075;
+    this.x = width*0.075;   this.y = height*0.075;
     this.on = on;
-    
   }
 
   display() {
