@@ -5,7 +5,7 @@ let vehicleWidth = 40;
 let eastbound = [];
 let westbound = [];
 let trafficLight;
-let initial;
+let currFrame;    let elapsed = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -32,7 +32,16 @@ function draw() {
   trafficLight.display();
   
   if(keyIsPressed && keyCode === 32) {
-    trafficLight = new TrafficLight(1);
+    currFrame = frameCount;
+    if (elapsed < 120){
+      elapsed = frameCount - currFrame;
+      trafficLight = new TrafficLight(1);
+      print(elapsed);
+    }
+    else {
+      trafficLight = new TrafficLight(0);
+    }
+ 
   }
 }
 
@@ -123,7 +132,7 @@ class Vehicle{
     else if (this.direction === 0) {
       this.x += this.speed;
       if (this.x > width) {
-        this.x = 0 - 0 - vehicleWidth;
+        this.x = 0 - vehicleWidth;
       }
     }
     else {
