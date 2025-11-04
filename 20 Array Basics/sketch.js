@@ -1,17 +1,12 @@
-let grid = [
-  [0,   255,  0,   255,  0],
-  [0,   255,  0,   255,  0],
-  [255,   0,    255, 0,    255],
-  [0,   255,  0,   255,    0],
-  [0,   0,    0,    0,    0]
-];
+let grid = [[]];
 
-let rows = grid.length;
-let cols = grid[0].length;
-
-let squareSize = 60;
+let squareSize = 50;
+let rows;
+let cols;
 
 function setup() {
+  rows = grid.length;
+  cols = grid[0].length;
   createCanvas(cols*squareSize, rows*squareSize);
 }
 
@@ -23,7 +18,16 @@ function draw() {
 }
 
 function mousePressed() {
-  flip(getCurrentX(), getCurrentY());
+  let x = getCurrentX();
+  let y = getCurrentY();
+
+  if (x + 1 < cols)  flip(x + 1, y);
+  if (y- 1 >= 0)     flip(x, y - 1);
+  if (x - 1 >= 0)    flip(x - 1, y);
+  if (y + 1 < rows)  flip(x, y + 1);
+
+  if(keyIsDown && keyCode === SHIFT) 
+
 }
 
 function getCurrentX() {
