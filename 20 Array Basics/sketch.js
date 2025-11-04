@@ -20,13 +20,14 @@ function draw() {
 function mousePressed() {
   let x = getCurrentX();
   let y = getCurrentY();
+  if(keyIsDown && keyCode === SHIFT) flip(x,y);
+  else {
+    if (x + 1 < cols)  flip(x + 1, y);
+    if (y- 1 >= 0)     flip(x, y - 1);
+    if (x - 1 >= 0)    flip(x - 1, y);
+    if (y + 1 < rows)  flip(x, y + 1);
+  }
 
-  if (x + 1 < cols)  flip(x + 1, y);
-  if (y- 1 >= 0)     flip(x, y - 1);
-  if (x - 1 >= 0)    flip(x - 1, y);
-  if (y + 1 < rows)  flip(x, y + 1);
-
-  if(keyIsDown && keyCode === SHIFT) 
 
 }
 
@@ -52,5 +53,24 @@ function renderGrid() {
       fill(fillColor);
       square(x*squareSize, y*squareSize, squareSize);
     }
+  }
+}
+
+function checkGrid() {
+  countB = 0;
+  countW = 0;
+  for(let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (grid[y][x] === 255)    countW++;
+      if (grid[y][x] === 0)    countB++;
+    }
+  }
+  if(countB === (cols+1)*(rows+1)) {
+    fill(255);
+    text("You Win", cols*(squareSize/2), rows*(squareSize/2))
+  }
+  if(countW === (cols+1)*(rows+1)) {
+    fill(0);
+    text("You Win", cols*(squareSize/2), rows*(squareSize/2))
   }
 }
