@@ -1,33 +1,36 @@
 let grid = [[]];
 
 let squareSize = 50;
-let rows;
-let cols;
+let rows = 10;
+let cols = 10;
+let x;
+let y;
 
 function setup() {
-  rows = grid.length;
-  cols = grid[0].length;
   createCanvas(cols*squareSize, rows*squareSize);
+  randomGrid();
 }
 
 function draw() {
   background(220);
   renderGrid();
-  // print(getCurrentX(), getCurrentY());
+  checkGrid();
+  x = getCurrentX();
+  y = getCurrentY();
 
 }
 
 function mousePressed() {
-  let x = getCurrentX();
-  let y = getCurrentY();
-  if(keyIsDown && keyCode === SHIFT) flip(x,y);
+  if(keyIsDown && keyCode === SHIFT) {
+    flip(x,y);
+  }
   else {
+    flip(x,y);
     if (x + 1 < cols)  flip(x + 1, y);
     if (y- 1 >= 0)     flip(x, y - 1);
     if (x - 1 >= 0)    flip(x - 1, y);
     if (y + 1 < rows)  flip(x, y + 1);
   }
-
 
 }
 
@@ -65,13 +68,25 @@ function checkGrid() {
       if (grid[y][x] === 0)    countB++;
     }
   }
-  
-  if(countB === (cols+1)*(rows+1)) {
+  textSize(40);
+  if(countB === cols*rows) {
     fill(255);
-    text("You Win", cols*(squareSize/2), rows*(squareSize/2))
+    text("You Win", cols*(squareSize*0.4), rows*(squareSize/2))
   }
-  if(countW === (cols+1)*(rows+1)) {
+  if(countW === cols*rows) {
     fill(0);
-    text("You Win", cols*(squareSize/2), rows*(squareSize/2))
+    text("You Win", cols*(squareSize*0.4), rows*(squareSize/2))
+  }
+}
+
+function randomGrid() {
+  for (let y = 0; y < rows; y++) {
+    grid.push([]);
+    for (let x = 0; x < cols; x++) {
+      let num = random(0,1);
+      if (num >= 0.5)   num = 255;
+      else num = 0;
+      grid[y].push(num);
+    }
   }
 }
