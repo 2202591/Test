@@ -65,6 +65,7 @@ function checkGrid() {
       if (grid[y][x] === 0)    countB++;
     }
   }
+  
   if(countB === (cols+1)*(rows+1)) {
     fill(255);
     text("You Win", cols*(squareSize/2), rows*(squareSize/2))
