@@ -1,4 +1,5 @@
 let grid = [[]];
+let overlayGrid;
 
 let squareSize = 50;
 let rows = 10;
@@ -9,12 +10,15 @@ let y;
 function setup() {
   createCanvas(cols*squareSize, rows*squareSize);
   randomGrid();
+  overlayGrid = grid;
+  print(overlayGrid);
 }
 
 function draw() {
   background(220);
   renderGrid();
   checkGrid();
+  // overlay();
   x = getCurrentX();
   y = getCurrentY();
 
@@ -71,11 +75,11 @@ function checkGrid() {
   textSize(40);
   if(countB === cols*rows) {
     fill(255);
-    text("You Win", cols*(squareSize*0.4), rows*(squareSize/2))
+    text("You Win", width*0.4, height/2);
   }
   if(countW === cols*rows) {
     fill(0);
-    text("You Win", cols*(squareSize*0.4), rows*(squareSize/2))
+    text("You Win", width*0.4, height/2);
   }
 }
 
@@ -89,4 +93,14 @@ function randomGrid() {
       grid[y].push(num);
     }
   }
+  grid.pop();
 }
+
+// function overlay() {
+//   push();
+//   if (x + 1 < cols)   
+//   if (y- 1 >= 0)      
+//   if (x - 1 >= 0)     
+//   if (y + 1 < rows)   
+//   pop();
+// }
