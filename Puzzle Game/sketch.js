@@ -6,6 +6,7 @@ let rows = 10;
 let cols = 10;
 let x;
 let y;
+let pattern = 0;
 
 function setup() {
   createCanvas(cols*squareSize, rows*squareSize);
@@ -24,16 +25,34 @@ function draw() {
 
 }
 
+function keyPressed() {
+  if(keyCode === 32) {
+    pattern++;
+    if (pattern === 2) {
+      pattern = 0
+    }
+    keyCode = 1;
+  }
+}
+
 function mousePressed() {
-  if(keyIsDown && keyCode === SHIFT) {
+  if (keyIsDown && keyCode === SHIFT) {
     flip(x,y);
   }
-  else {
+  else if (pattern = 1) {
+    print(1);
     flip(x,y);
     if (x + 1 < cols)  flip(x + 1, y);
     if (y- 1 >= 0)     flip(x, y - 1);
     if (x - 1 >= 0)    flip(x - 1, y);
     if (y + 1 < rows)  flip(x, y + 1);
+  }
+  else {
+    print(0);
+    flip(x,y);
+    if (x + 1 < cols)  flip(x + 1, y);
+    if (y + 1 < rows)  flip(x, y + 1);
+    if (y + 1 < rows && x + 1 < cols)  flip(x+1, y+1);
   }
 
 }
