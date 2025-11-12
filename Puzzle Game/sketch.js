@@ -20,64 +20,52 @@ function draw() {
   renderGrid();
   checkGrid();
   // overlay();
-  x = getCurrentX();
+  x = getCurrentX();  //gets  mouse X and Y as global variables
   y = getCurrentY();
 
 }
 
-function keyPressed() {
-  if(keyCode === 32) {
-    pattern++;
-    if (pattern === 2) {
-      pattern = 0
-    }
-    keyCode = 1;
-  }
-}
-
 function mousePressed() {
-  if (keyIsDown && keyCode === SHIFT) {
+  if (keyIsDown(16)) {  //if shift is down only flips 1 square
     flip(x,y);
   }
-  else if (pattern = 1) {
-    print(1);
+  else if (keyIsDown(32)) {  //if space is held down square pattern
+    flip(x,y);
+    if (x + 1 < cols)  flip(x + 1, y);
+    if (y + 1 < rows)  flip(x, y + 1);
+    if (y + 1 < rows && x + 1 < cols)  flip(x+1, y+1);
+  }
+  else {  //cross pattern
     flip(x,y);
     if (x + 1 < cols)  flip(x + 1, y);
     if (y- 1 >= 0)     flip(x, y - 1);
     if (x - 1 >= 0)    flip(x - 1, y);
     if (y + 1 < rows)  flip(x, y + 1);
   }
-  else {
-    print(0);
-    flip(x,y);
-    if (x + 1 < cols)  flip(x + 1, y);
-    if (y + 1 < rows)  flip(x, y + 1);
-    if (y + 1 < rows && x + 1 < cols)  flip(x+1, y+1);
-  }
 
 }
 
-function getCurrentX() {
-  let constrainedX = constrain(mouseX, 0, width-1);
+function getCurrentX() {  //gets mouse X postion in terms of grid squares
+  let constrainedX = constrain(mouseX, 0, width-1);  //only allows mouse X postion on the canvas
   return floor(constrainedX / squareSize);
 }
 
-function getCurrentY() {
+function getCurrentY() {  //gets mouse Y postion in terms of grid squares
   let constrainedY = constrain(mouseY, 0, height-1);
   return floor(constrainedY / squareSize);
 }
 
-function flip(x,y) {
+function flip(x,y) {  //swaps white to black and black to white
   if (grid[y][x] === 0)  grid[y][x] = 255;
   else grid[y][x] = 0;
 }
 
-function renderGrid() {
+function renderGrid() {  //turns array into grid with color
   for(let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      let fillColor = grid[y][x];
+      let fillColor = grid[y][x];  //takes color
       fill(fillColor);
-      square(x*squareSize, y*squareSize, squareSize);
+      square(x*squareSize, y*squareSize, squareSize);  //creates square
     }
   }
 }
