@@ -23,6 +23,7 @@ function setPixelColor(x, y, r, g, b){
 }
 
 function draw() {
+  background(0);
   image(pilot,0,0);
   loadPixels();
   // boost();
@@ -37,7 +38,8 @@ function textImage() {
     for(let y = 0; y < height; y+=10) {
       let avg = getAverage(x,y);
       if (avg > 200)  text("%", x, y);
-      else if(avg > 100)
+      else if(avg > 100) text("|", x, y)
+      else text("0",x ,y );
     }
   }
 }
