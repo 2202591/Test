@@ -2,9 +2,10 @@ let chip;
 let race;
 let nuit;
 let hand;
+let butterfly; 
 
 function setup() {
-  createCanvas(600, 2400);
+  createCanvas(600, 3600);
   loadAssets();
 }
 
@@ -13,6 +14,7 @@ async function loadAssets() {
   race = await loadImage("assets/race.jpg");
   nuit = await loadImage("assets/nuit.jpg");
   hand = await loadImage("assets/hand.jpg");
+  butterfly = await loadImage("assets/butterfly.jpg");
 }
 
 function setPixelOneD(pos, r, g, b){
@@ -32,12 +34,15 @@ function draw() {
   image(race,0,600);
   image(nuit,0,1200);
   image(hand,0,1800);
+  image(butterfly,0,2400);
+  image(nuit,0,3000);
   loadPixels();
 
   majorityColor();
   noGreen();
   fiveColor();
   mirror();
+  xBlur();
   updatePixels();
 }
 
@@ -78,10 +83,9 @@ function noGreen() {
     for(let y = 600; y < 1200; y++) {
       let i = (width*y + x) *4;
       let r = pixels[i];
-      let g = pixels[i+1];
       let b = pixels[i+2];
       if (x > width/2) {
-        setPixel(width-x, y, r, 0, b);
+        setPixel(x, y, r, 0, b);
       }
     }
   }
@@ -112,7 +116,7 @@ function fiveColor() {
 
 function mirror() {
   for(let x = 0; x < width; x++){
-    for(let y = 1800; y < height ; y++) {
+    for(let y = 1800; y < 2400 ; y++) {
       let i = (width*y + x) *4;
       let r = pixels[i];
       let g = pixels[i+1];
@@ -123,3 +127,34 @@ function mirror() {
     }
   }
 }
+
+// function rotateCorners() {
+//   let srcPixels = structuredClone(pixels);
+//   for(let x = 0; x < width; x++){
+//     for(let y = 2400; y < 3000; y++) {
+      
+//     }
+//   }
+// }
+
+function xBlur() {
+  let radius = 10;
+  for(let x = 0; x < width; x++){
+    for(let y = 3000; y < 3600; y++) {
+      let averageR;
+      let averageG;
+      let averageB;
+      for(let r = -radius/2; r < radius/2; r++) {
+        let i = (width*(y+r) + (x+r)) * 4;
+        averageR += pixels[i];
+        averageG += pixels[i+1];
+        averageB += pixels[i+2];
+      }
+      averageR = averageR/radius;
+      averageG = averageG/radius;
+      averageB = averageB/radius;
+      setPixel(x,y,averageR,averageG,averageB);
+    }
+  }
+}
+
