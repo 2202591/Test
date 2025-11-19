@@ -138,21 +138,32 @@ function mirror() {
 // }
 
 function xBlur() {
-  let radius = 10;
+  let radius = 15;
+  let srcPixels = structuredClone(pixels);
   for(let x = 0; x < width; x++){
     for(let y = 3000; y < 3600; y++) {
-      let averageR;
-      let averageG;
-      let averageB;
-      for(let r = -radius/2; r < radius/2; r++) {
-        let i = (width*(y+r) + (x+r)) * 4;
-        averageR += pixels[i];
-        averageG += pixels[i+1];
-        averageB += pixels[i+2];
+      let averageR = 0;
+      let averageG = 0;
+      let averageB = 0;
+      for(let r = -radius ; r < radius + 1; r++) {
+        if(r !== 0){
+          let i = (width*(y+r) + (x+r)) * 4;
+          averageR += srcPixels[i];
+          averageG += srcPixels[i+1];
+          averageB += srcPixels[i+2];
+        } 
       }
-      averageR = averageR/radius;
-      averageG = averageG/radius;
-      averageB = averageB/radius;
+      for(let r = -radius ; r < radius + 1; r++) {
+        if(r !== 0){
+          let i = (width*(y+r) + (x-r)) * 4;
+          averageR += srcPixels[i];
+          averageG += srcPixels[i+1];
+          averageB += srcPixels[i+2];
+        } 
+      }
+      averageR = averageR/(radius*2);
+      averageG = averageG/(radius*2);
+      averageB = averageB/(radius*2);
       setPixel(x,y,averageR,averageG,averageB);
     }
   }
